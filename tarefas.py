@@ -17,7 +17,6 @@ def adicionar_tarefa(descricao):
             "INSERT INTO tarefas (descricao) VALUES (?)", (descricao,)
         )
 
-    
 def listar_tarefas():
     with conectar() as conexao:
         linhas = conexao.execute(
@@ -35,18 +34,27 @@ def listar_tarefas():
             marca = " "
         print(f"[{marca}] {id_tarefa} - {descricao}")
 
-
 def concluir_tarefa(id_tarefa):
     with conectar() as conexao:
-        conexao.execute(
+        cursor = conexao.execute(
             "UPDATE tarefas SET concluida = 1 WHERE id = ?", (id_tarefa,)
         )
+        return cursor.rowcount > 0
 
 def apagar_tarefa(id_tarefa):
     with conectar() as conexao:
-        conexao.execute(
+        cursor = conexao.execute(
             "DELETE FROM tarefas WHERE id = ?", (id_tarefa,)
         )
+        return cursor.rowcount > 0
+
+def ler_numero(mensagem):
+    while True:
+        valor = input(mensagem)
+        try:
+            return int(valor)
+        except ValueError:
+            print("Digite apenas números.")
 
 def menu():
     while True:
@@ -58,19 +66,26 @@ def menu():
         opcao = input("Escolha: ")
 
         if opcao == "1":
-            texto = input("Nova tarefa: ")
-            adicionar_tarefa(texto)
-            print("Tarefa adicionada!")
+            texto = input("Nova tarefa: ").strip()
+            if texto == "":
+                print("A tarefa não pode ficar vazia.")
+            else:
+                adicionar_tarefa(texto)
+                print("Tarefa adicionada!")
         elif opcao == "2":
             listar_tarefas()
         elif opcao == "3":
-            id_tarefa = int(input("Número da tarefa: "))
-            concluir_tarefa(id_tarefa)
-            print("Tarefa concluída!")
+            id_tarefa = ler_numero("Número da tarefa: ")
+            if concluir_tarefa(id_tarefa):
+                print("Tarefa concluída!")
+            else:
+                print("Tarefa não encontrada.")
         elif opcao == "4":
-            id_tarefa = int(input("Número da tarefa: "))
-            apagar_tarefa(id_tarefa)
-            print("Tarefa apagada!")
+            id_tarefa = ler_numero("Número da tarefa: ")
+            if apagar_tarefa(id_tarefa):
+                print("Tarefa apagada!")
+            else:
+                print("Tarefa não encontrada.")
         elif opcao == "0":
             print("Até logo!")
             break
@@ -79,4 +94,3 @@ def menu():
 
 if __name__ == "__main__":
     menu()
- 
