@@ -21,3 +21,26 @@ if __name__ == "__main__":
     texto = input("Nova tarefa: ")
     adicionar_tarefa(texto)
     print("Tarefa adicionada!")
+    
+def listar_tarefas():
+    with conectar() as conexao:
+        linhas = conexao.execute(
+            "SELECT id, descricao, concluida FROM tarefas"
+        ).fetchall()
+
+    if not linhas:
+        print("Nenhuma tarefa cadastrada.")
+        return
+
+    for id_tarefa, descricao, concluida in linhas:
+        if concluida == 1:
+            marca = "x"
+        else:
+            marca = " "
+        print(f"[{marca}] {id_tarefa} - {descricao}")
+
+if __name__ == "__main__":
+    texto = input("Nova tarefa: ")
+    adicionar_tarefa(texto)
+    print("Tarefa adicionada!")
+    listar_tarefas()
