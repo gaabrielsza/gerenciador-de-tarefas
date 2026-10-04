@@ -17,10 +17,6 @@ def adicionar_tarefa(descricao):
             "INSERT INTO tarefas (descricao) VALUES (?)", (descricao,)
         )
 
-if __name__ == "__main__":
-    texto = input("Nova tarefa: ")
-    adicionar_tarefa(texto)
-    print("Tarefa adicionada!")
     
 def listar_tarefas():
     with conectar() as conexao:
@@ -39,8 +35,20 @@ def listar_tarefas():
             marca = " "
         print(f"[{marca}] {id_tarefa} - {descricao}")
 
+
+def concluir_tarefa(id_tarefa):
+    with conectar() as conexao:
+        conexao.execute(
+            "UPDATE tarefas SET concluida = 1 WHERE id = ?", (id_tarefa,)
+        )
+
+def apagar_tarefa(id_tarefa):
+    with conectar() as conexao:
+        conexao.execute(
+            "DELETE FROM tarefas WHERE id = ?", (id_tarefa,)
+        )
+
 if __name__ == "__main__":
-    texto = input("Nova tarefa: ")
-    adicionar_tarefa(texto)
-    print("Tarefa adicionada!")
+    apagar_tarefa(2)
     listar_tarefas()
+ 
