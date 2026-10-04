@@ -48,7 +48,35 @@ def apagar_tarefa(id_tarefa):
             "DELETE FROM tarefas WHERE id = ?", (id_tarefa,)
         )
 
+def menu():
+    while True:
+        print("\n1 - Adicionar tarefa")
+        print("2 - Listar tarefas")
+        print("3 - Concluir tarefa")
+        print("4 - Apagar tarefa")
+        print("0 - Sair")
+        opcao = input("Escolha: ")
+
+        if opcao == "1":
+            texto = input("Nova tarefa: ")
+            adicionar_tarefa(texto)
+            print("Tarefa adicionada!")
+        elif opcao == "2":
+            listar_tarefas()
+        elif opcao == "3":
+            id_tarefa = int(input("Número da tarefa: "))
+            concluir_tarefa(id_tarefa)
+            print("Tarefa concluída!")
+        elif opcao == "4":
+            id_tarefa = int(input("Número da tarefa: "))
+            apagar_tarefa(id_tarefa)
+            print("Tarefa apagada!")
+        elif opcao == "0":
+            print("Até logo!")
+            break
+        else:
+            print("Opção inválida.")
+
 if __name__ == "__main__":
-    apagar_tarefa(2)
-    listar_tarefas()
+    menu()
  
